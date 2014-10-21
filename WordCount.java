@@ -25,7 +25,6 @@ public class  {
     public void map(Object key, Text value, Context context
                     ) throws IOException, InterruptedException {
 
-
       final String[] mapperLine = value.toString().split("\\s+");
       final String keyString = s[1] + " " + s[0];
       final String[]  valuesArr = {s[3],s[4],(s[6].equals(2))?s[5]:"0"};
@@ -34,7 +33,6 @@ public class  {
       values = new ArrayWritable(valuesArr);
 
       context.write(key, values);
-      
     }
   }
 
