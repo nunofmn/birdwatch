@@ -1,3 +1,5 @@
+package birdwatch;
+
 import java.io.IOException;
 import java.util.StringTokenizer;
 
@@ -11,7 +13,7 @@ import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
-public class WordCount {
+public class  {
 
   public static class TokenizerMapper
        extends Mapper<Object, Text, Text, ArrayWritable>{
@@ -24,22 +26,15 @@ public class WordCount {
                     ) throws IOException, InterruptedException {
 
 
+      final String[] mapperLine = value.toString().split("\\s+");
+      final String keyString = s[1] + " " + s[0];
+      final String[]  valuesArr = {s[3],s[4],(s[6].equals(2))?s[5]:"0"};
 
-      String[] s = value.toString().split("\\s+");
-      String qq = s[1] + " " + s[0];
-
-      key.set(qq);
-      if ( Integer.parseInt(s[6]) != 2)
-        s[5] = "0";
-
-      String[] s2 = {s[3],s[4],s[5]};
-
-      values = new ArrayWritable(s2);
-
+      key.set(keyString);
+      values = new ArrayWritable(valuesArr);
 
       context.write(key, values);
       
-
     }
   }
 
