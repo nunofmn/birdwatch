@@ -1,14 +1,13 @@
-package birdwatch; 
-
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 
 import org.apache.hadoop.io.Text;
-import org.apache.hadoop.io.ArrayWritable;
 import org.apache.hadoop.mapreduce.Job;
 
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+
+import java.util.Map;
 
 
 public final class Main{
@@ -18,15 +17,12 @@ public final class Main{
     Configuration conf = new Configuration();
     Job job = Job.getInstance(conf, "birdwatch");
     job.setJarByClass(Main.class);
-    job.setMapperClass(BirdWatchMapper.class);
+    job.setMapperClass(BirdMapper.class);
    
-
-    job.setCombinerClass(IntSumReducer.class);
-    job.setReducerClass(IntSumReducer.class);
-
+    job.setReducerClass(BirdReducer.class);
 
     job.setOutputKeyClass(Text.class);
-    job.setOutputValueClass(ArrayWritable.class);
+    job.setOutputValueClass(MapperOutputWritable.class);
     
     FileInputFormat.addInputPath(job, new Path(args[0]));
     FileOutputFormat.setOutputPath(job, new Path(args[1]));

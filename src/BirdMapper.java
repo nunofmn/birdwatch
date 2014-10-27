@@ -1,8 +1,5 @@
-
-
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
-import src.MapperOutputWritable;
 import java.io.IOException;
 
 public class BirdMapper extends org.apache.hadoop.mapreduce.Mapper<Object, Text, Text, MapperOutputWritable> {
@@ -15,7 +12,12 @@ public class BirdMapper extends org.apache.hadoop.mapreduce.Mapper<Object, Text,
     ) throws IOException, InterruptedException {
 
 
-        final String[] s = value.toString().split("\\s+");
+        final String[] totrim = value.toString().split(",");
+        final String[] s = new String[totrim.length];
+
+        for(int i=0; i<totrim.length; i++)
+            s[i]=totrim[i].trim();
+
         final String wing = (s[6].equals(2))?s[5]:"0";
         //final String keyString = s[1] + " " + s[0];
         outputMapperQ1Q2.setQueryType(new IntWritable(0));
