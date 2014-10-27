@@ -18,20 +18,23 @@ public class BirdMapper extends org.apache.hadoop.mapreduce.Mapper<Object, Text,
         for(int i=0; i<totrim.length; i++)
             s[i]=totrim[i].trim();
 
-        final String wing = (s[6].equals(2))?s[5]:"0";
-        //final String keyString = s[1] + " " + s[0];
-        outputMapperQ1Q2.setQueryType(new IntWritable(0));
-        outputMapperQ1Q2.setBirdid(new Text(s[3]));
-        outputMapperQ1Q2.setBirdweight(new IntWritable(Integer.parseInt(s[4])));
-        outputMapperQ1Q2.setTowerid(new Text(s[0]));
-        outputMapperQ1Q2.setWingspan(new IntWritable(Integer.parseInt(wing)));
-        keyWordQ1Q2.set(s[1]);
-        context.write(keyWordQ1Q2, outputMapperQ1Q2);
+        if(!(s[3].equals("-1"))) {
+            final String wing = (s[6].equals("2")) ? s[5] : "0";
+            outputMapperQ1Q2.setQueryType(new IntWritable(0));
+            outputMapperQ1Q2.setBirdid(new Text(s[3]));
+            outputMapperQ1Q2.setBirdweight(new IntWritable(Integer.parseInt(s[4])));
+            outputMapperQ1Q2.setTowerid(new Text(s[0]));
+            outputMapperQ1Q2.setWingspan(new IntWritable(Integer.parseInt(wing)));
+            keyWordQ1Q2.set(s[1]);
+            context.write(keyWordQ1Q2, outputMapperQ1Q2);
+        }
 
-        outputMapperQ3.setQueryType(new IntWritable(1));
-        outputMapperQ3.setDate(new Text(s[1]));
-        keyWordQ3.set(s[3]); //birdId
-        context.write(keyWordQ3, outputMapperQ3);
+        if(!(s[3].equals("0")) && !(s[3].equals("-1"))) {
+            outputMapperQ3.setQueryType(new IntWritable(1));
+            outputMapperQ3.setDate(new Text(s[1]));
+            keyWordQ3.set(s[3]); //birdId
+            context.write(keyWordQ3, outputMapperQ3);
+        }
 
     }
 }

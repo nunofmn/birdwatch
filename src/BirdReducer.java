@@ -34,6 +34,8 @@ public class BirdReducer extends Reducer<Text, MapperOutputWritable, Text, Text>
 
         for(MapperOutputWritable value : values) {
 
+
+
             querytype = value.getQueryType().get();
 
             if(value.getQueryType().get() == 0) {
@@ -55,7 +57,7 @@ public class BirdReducer extends Reducer<Text, MapperOutputWritable, Text, Text>
                 }
 
             }else{
-                String birdid = value.getBirdid().toString();
+                String birdid = key.toString();
 
                 //Bird last seen date -> Query 3
                 if(birdlastdate.containsKey(birdid)) {
@@ -98,8 +100,6 @@ public class BirdReducer extends Reducer<Text, MapperOutputWritable, Text, Text>
 
         }else{
             //Output (k3,v3) -> Query 3
-            outputk3.set(key);
-
             for(Map.Entry<String, String> entry : birdlastdate.entrySet()) {
                 outputk3.set(entry.getKey());
                 outputv3.set(entry.getValue());
