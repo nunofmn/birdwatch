@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<title>
+  BirdWatch!
+</title>
+<script>
+
+  var sendReq = function(){
+    var req = new XMLHttpRequest();
+
+    req.onreadystatechange = function (){ 
+     if ( req.readyState == 4 && req.status == 200 ) {
+      document.getElementById('z').innerHTML = req.responseText
+      }
+    };
+
+    req.open("GET","/sampaio");
+    req.send();
+  }
+
+
+</script>
+</head>
+<body>
+  <h1>Welcome <sam id="z"></sam>!</h1>
+  <h3>Biggest birds!!</h3>
+  <strong>Pick a date</strong> <i>(dd/mm/yy)</i> :<br>
+  <input id="date_big"><button onclick="sendReq()">GO!</button><br>
+  <h3>Total fat seen!!</h3>
+  <strong>Pick a date</strong> <i>(dd/mm/yy)</i><strong> and tower</strong> :<br>
+  <input id="date_fat"><input id="tower"><button>GO!</button>
+  <h3>Presumed dead!!</h3>
+  <button>Find Dead!</button>
+  <hr>
+   Copyright 1992-2015 by Nuno Nogueira. All Rights Reserved.
+</body>
+
+</html>
