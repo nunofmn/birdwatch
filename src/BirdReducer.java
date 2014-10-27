@@ -90,9 +90,12 @@ public class BirdReducer extends Reducer<Text, MapperOutputWritable, Text, Text>
             context.write(outputk1, outputv1);
 
             //Output (k2,v2) -> Query 2
-            outputk2.set(key);
-            outputv2.set(towermaxwingspan);
-            context.write(outputk2, outputv2);
+            for(Map.Entry<String, Integer> entry : towerweight.entrySet()) {
+                outputk2.set(key + ":" + entry.getKey());
+                outputv2.set(entry.getValue().toString());
+                context.write(outputk2, outputv2);
+            }
+
         }else{
             //Output (k3,v3) -> Query 3
             outputk3.set(key);
