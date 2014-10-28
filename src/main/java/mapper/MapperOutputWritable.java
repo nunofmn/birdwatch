@@ -1,3 +1,5 @@
+package mapper;
+
 import org.apache.hadoop.io.*;
 
 import java.io.DataInput;

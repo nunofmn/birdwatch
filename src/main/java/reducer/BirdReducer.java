@@ -1,3 +1,7 @@
+package reducer;
+
+import mapper.MapperOutputWritable;
+import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 
@@ -8,19 +12,19 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BirdReducer extends Reducer<Text, MapperOutputWritable, Text, Text> {
+public class BirdReducer extends Reducer<Text, MapperOutputWritable, Text, ReducerOutputWritable> {
 
     // Query 1 (K1,V1)
     private Text outputk1 = new Text();
-    private Text outputv1 = new Text();
+    private ReducerOutputWritable outputv1 = new ReducerOutputWritable();
 
     // Query 2 (K2,V2)
     private Text outputk2 = new Text();
-    private Text outputv2 = new Text();
+    private ReducerOutputWritable outputv2 = new ReducerOutputWritable();
 
     // Query 3 (K3,V3)
     private Text outputk3 = new Text();
-    private Text outputv3 = new Text();
+    private ReducerOutputWritable outputv3 = new ReducerOutputWritable();
 
 
     public void reduce(Text key, Iterable<MapperOutputWritable> values, Context context)
@@ -88,13 +92,15 @@ public class BirdReducer extends Reducer<Text, MapperOutputWritable, Text, Text>
         if(querytype == 0) {
             //Output (k1,v1) -> Query 1
             outputk1.set(key);
-            outputv1.set(towermaxwingspan);
+            outputv1.setQuerytype(new IntWritable(1));
+            outputv1.setTowerid(new Text(towermaxwingspan));
             context.write(outputk1, outputv1);
 
             //Output (k2,v2) -> Query 2
             for(Map.Entry<String, Integer> entry : towerweight.entrySet()) {
                 outputk2.set(key + ":" + entry.getKey());
-                outputv2.set(entry.getValue().toString());
+                outputv2.setQuerytype(new IntWritable(2));
+                outputv2.setWeight(new IntWritable(entry.getValue()));
                 context.write(outputk2, outputv2);
             }
 
@@ -102,7 +108,8 @@ public class BirdReducer extends Reducer<Text, MapperOutputWritable, Text, Text>
             //Output (k3,v3) -> Query 3
             for(Map.Entry<String, String> entry : birdlastdate.entrySet()) {
                 outputk3.set(entry.getKey());
-                outputv3.set(entry.getValue());
+                outputv3.setQuerytype(new IntWritable(3));
+                outputv3.setDate(new Text(entry.getValue()));
                 context.write(outputk3, outputv3);
             }
         }
