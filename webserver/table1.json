@@ -1,0 +1,33 @@
+{
+	"TableName" : "table1",
+
+	"AttributeDefinitions" : [
+		{
+		"AttributeName" : "date", 
+		"AttributeType" : "S"
+		},
+		{
+		"AttributeName" : "towerId",	//tower with biggest bird seen at certain date
+		"AttributeType" : "S"
+		}
+	],
+
+	"KeySchema" : [
+	//date as hash will be unordered, looks like a system limitation, need to have hash-range key with 2 values
+	//Can I fool it like this and make the table be ordered by data?
+		{
+		"AttributeName" : "towerId",
+		"KeyType" : "HASH"
+
+		},
+		{	
+		"AttributeName" : "date",
+		"KeyType" : "RANGE",
+		}
+	],
+	"ProvisionedThroughput": 
+	 	{ 
+    	"ReadCapacityUnits": 1, /*Read and write capacity minimum values -> 4kb read/sec and 1kb write/sec*/
+    	"WriteCapacityUnits": 1 
+  		}
+}

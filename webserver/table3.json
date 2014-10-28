@@ -1,0 +1,31 @@
+{
+	"TableName" : "table3",
+
+	"AttributeDefinitions" : [
+		{
+		"AttributeName" : "lastDate", 
+		"AttributeType" : "S"
+		},
+		{
+		"AttributeName" : "birdId",	
+		"AttributeType" : "S"
+		}
+	],
+
+	"KeySchema" : [
+		{
+		"AttributeName" : "birdId",
+		"KeyType" : "HASH"
+
+		},
+		{	
+		"AttributeName" : "lastDate",
+		"KeyType" : "RANGE",
+		}
+	],
+	"ProvisionedThroughput": 
+	 	{ 
+    	"ReadCapacityUnits": 1,
+    	"WriteCapacityUnits": 1 
+  		}
+}

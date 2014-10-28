@@ -1,0 +1,32 @@
+{
+  "name": "BirdWatch",
+  "version": "0.0.0",
+  "description": "Bird watch application",
+  "main": "app.js",
+  "dependencies": {
+    "aws-sdk": "~2.0.23",
+    "express": "~4.10.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "\"\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nunofmn/birdwatch"
+  },
+  "keywords": [
+    "bird",
+    "watch",
+    "birdwatch",
+    "cloud",
+    "computing",
+    "Sampaio"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nunofmn/birdwatch/issues"
+  },
+  "homepage": "https://github.com/nunofmn/birdwatch"
+}
