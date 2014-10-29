@@ -7,33 +7,69 @@
 </title>
 <script>
 
-  var sendReq = function(){
+  var bigbirds = function(){
     var req = new XMLHttpRequest();
 
     req.onreadystatechange = function (){ 
      if ( req.readyState == 4 && req.status == 200 ) {
-      document.getElementById('z').innerHTML = req.responseText
+      document.getElementById('response').innerHTML = req.responseText;
       }
     };
 
-    req.open("GET","/sampaio");
-    req.send();
+    var val = document.getElementById("date_big").value;
+    console.log(val);
+
+    req.open("POST","/bigbirds");
+    req.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+	req.send(JSON.stringify({date:val}));
+  }
+  
+  var totalweight = function(){
+    var req = new XMLHttpRequest();
+
+    req.onreadystatechange = function (){ 
+     if ( req.readyState == 4 && req.status == 200 ) {
+      document.getElementById('response').innerHTML = req.responseText
+      }
+    };
+
+    var val = document.getElementById("date_fat").value,
+    	val2 = document.getElementById("tower").value;
+
+    req.open("POST","/totalweight");
+    req.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+	req.send(JSON.stringify({date:val,towerId:val2}));
   }
 
+  var unseen = function(){
+    var req = new XMLHttpRequest();
+
+    req.onreadystatechange = function (){ 
+     if ( req.readyState == 4 && req.status == 200 ) {
+      document.getElementById('response').innerHTML = req.responseText;
+      }
+    };
+
+    req.open("GET","/unseen");
+	req.send();
+  }
 
 </script>
 </head>
 <body>
   <h1>Welcome <sam id="z"></sam>!</h1>
   <h3>Biggest birds!!</h3>
-  <strong>Pick a date</strong> <i>(dd/mm/yy)</i> :<br>
-  <input id="date_big"><button onclick="sendReq()">GO!</button><br>
+  <strong>Pick a date</strong> <i>(dd-mm-yyyy)</i> :<br>
+  <input id="date_big"><button onclick="bigbirds()">GO!</button><br>
   <h3>Total fat seen!!</h3>
-  <strong>Pick a date</strong> <i>(dd/mm/yy)</i><strong> and tower</strong> :<br>
-  <input id="date_fat"><input id="tower"><button>GO!</button>
+  <strong>Pick a date</strong> <i>(dd-mm-yyyy)</i><strong> and tower</strong> :<br>
+  <input id="date_fat"><input id="tower"><button onclick="totalweight();">GO!</button>
   <h3>Presumed dead!!</h3>
-  <button>Find Dead!</button>
-  <hr>
+  <button onclick="unseen();">Find Dead!</button>
+  <div id="response">
+
+  </div>
+<hr>
    Copyright 1992-2015 by Nuno Nogueira. All Rights Reserved.
 </body>
 

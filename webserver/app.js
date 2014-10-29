@@ -3,9 +3,9 @@ var express = require('express'),
 	app = express(),
 	AWS,
 	dynamoDB;
-
+var bodyParser = require('body-parser');
 app.use(express.static(__dirname+"/public"));
-
+app.use(bodyParser.json());
 
 //
 //	Allow access to aws and dynamoDB when ready to deploy
@@ -52,12 +52,23 @@ if (process.env.NODE_ENV==='deploy'){
 }
 
 
-app.get('/',function(req,res) {
+app.get('/', function (req,res) {
 	res.render("./public/index.html");
 });
 
-app.get('/sampaio',function(req,res){
-	res.status(200).send('Sampaio');
+app.post('/bigbirds', function (req,res){
+	//var date = req.body.date;
+	console.log(req.body);
+	res.status(200).send("tower-10");
+});
+app.post('/totalweight', function (req,res){
+	 console.log(req.body);
+	res.status(200).send("135907");
+});
+
+app.get('/unseen', function (req,res) {
+	console.log(req.body);
+	res.status(200).send(["hawk-49","sparrow-201","parrot-307","hawk-19"]);
 });
 
 app.listen( process.env.PORT || 3000 );

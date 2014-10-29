@@ -5,7 +5,9 @@
   "main": "app.js",
   "dependencies": {
     "aws-sdk": "~2.0.23",
-    "express": "~4.10.0"
+    "express": "~4.10.0",
+    "body-parser": "^1.9.2",
+    "install": "^0.1.7"
   },
   "devDependencies": {},
   "scripts": {
