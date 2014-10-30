@@ -1,77 +1,60 @@
 <!DOCTYPE html>
 
-<html>
+<html class="full" lang="en">
 <head>
-<title>
-  BirdWatch!
-</title>
-<script>
-
-  var bigbirds = function(){
-    var req = new XMLHttpRequest();
-
-    req.onreadystatechange = function (){ 
-     if ( req.readyState == 4 && req.status == 200 ) {
-      document.getElementById('response').innerHTML = req.responseText;
-      }
-    };
-
-    var val = document.getElementById("date_big").value;
-    console.log(val);
-
-    req.open("POST","/bigbirds");
-    req.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-	req.send(JSON.stringify({date:val}));
-  }
-  
-  var totalweight = function(){
-    var req = new XMLHttpRequest();
-
-    req.onreadystatechange = function (){ 
-     if ( req.readyState == 4 && req.status == 200 ) {
-      document.getElementById('response').innerHTML = req.responseText
-      }
-    };
-
-    var val = document.getElementById("date_fat").value,
-    	val2 = document.getElementById("tower").value;
-
-    req.open("POST","/totalweight");
-    req.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-	req.send(JSON.stringify({date:val,towerId:val2}));
-  }
-
-  var unseen = function(){
-    var req = new XMLHttpRequest();
-
-    req.onreadystatechange = function (){ 
-     if ( req.readyState == 4 && req.status == 200 ) {
-      document.getElementById('response').innerHTML = req.responseText;
-      }
-    };
-
-    req.open("GET","/unseen");
-	req.send();
-  }
-
-</script>
+	<meta charset="utf-8">
+	<link rel="icon" href="favicon.ico">
+	<title>BirdWatch!</title>
+	<script type="text/javascript" src="birdwatch.js"></script>
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/jumbotron-narrow.css" rel="stylesheet">
+	<link href="css/the-big-picture.css" rel="stylesheet">
 </head>
 <body>
-	<img src="birdwatch.png" alt="birdwatch" width="500em" height="250em">
-  <h1>Welcome <sam id="z"></sam>!</h1>
-  <h3>Biggest birds!!</h3>
-  <strong>Pick a date</strong> <i>(dd-mm-yyyy)</i> :<br>
-  <input id="date_big"><button onclick="bigbirds()">GO!</button><br>
-  <h3>Total fat seen!!</h3>
-  <strong>Pick a date</strong> <i>(dd-mm-yyyy)</i><strong> and tower</strong> :<br>
-  <input id="date_fat"><input id="tower"><button onclick="totalweight();">GO!</button>
-  <h3>Presumed dead!!</h3>
-  <button onclick="unseen();">Find Dead!</button>
-  <div id="response">
 
-  </div>
-<hr>
-   Copyright 1992-2015 by Nuno Nogueira. All Rights Reserved.
+   <div class="container">
+<img src="birdwatch.png" alt="birdwatch" width="100%" height="100%">
+    	<div class ="panel panel-default" style="background-color:white;"><div class="panel-body">
+
+				<center><h3><strong>Bird with biggest wingspan!!</strong></h3></center>
+				<form role="form">
+  					<div class="form-group">
+  						<label>Pick a date</label>
+ 						<input id="date_big" type="text" class="form-control" placeholder="DD-MM-YYYY">
+					</div>
+					<button type="button" class="btn btn-default" onclick="bigbirds()">GO!</button>
+				</form>
+				<hr>
+
+				<center><h3><strong>Total weight!</strong></h3></center>
+				<form role="form">
+  					<div class="form-group">
+    					<label>Pick a date</label>
+   				 		<input type="text" class="form-control" id="date_fat" placeholder="DD-MM-YYYY">
+  					</div>
+  					<div class="form-group">
+    					<label>Choose the tower identifier</label>
+    					<input type="text" class="form-control" id="tower">
+  					</div>
+  					<button type="button" class="btn btn-default" onclick="totalweight();">GO!</button>
+				</form>
+				<hr>
+
+				<center><h3><strong>Not seen for a week!</strong></h3>
+				<button type="button" class="btn btn-default" onclick="unseen();">GO!</button>
+				</center>
+				<hr>
+				Output:
+				<div class="well" id="response">
+				</div>
+      		<br>	
+    	</div>
+    	</div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+
 </body>
 
 </html>
