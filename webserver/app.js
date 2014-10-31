@@ -72,3 +72,6 @@ app.get('/unseen', function (req,res) {
 });
 
 app.listen( process.env.PORT || 3000 );
+
+console.log("--- Birdwatch app webserver ---");
+console.log("Running in http://localhost:" + (process.env.PORT||3000));
