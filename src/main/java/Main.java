@@ -1,3 +1,4 @@
+import mapper.BirdCombiner;
 import mapper.BirdMapper;
 import mapper.MapperOutputWritable;
 import org.apache.hadoop.conf.Configuration;
@@ -20,7 +21,7 @@ public final class Main{
     Job job = Job.getInstance(conf, "birdwatch");
     job.setJarByClass(Main.class);
     job.setMapperClass(BirdMapper.class);
-   
+    //job.setCombinerClass(BirdCombiner.class);
     job.setReducerClass(BirdReducer.class);
 
     job.setMapOutputKeyClass(Text.class);
