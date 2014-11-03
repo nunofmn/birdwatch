@@ -21,7 +21,7 @@ public class BirdCombiner extends Reducer<Text, MapperOutputWritable, Text, Mapp
 
         Set<MapperOutputWritable> unique = new HashSet<MapperOutputWritable>();
         for (MapperOutputWritable value : values) {
-            if (unique.add(value)) {
+            if (!value.getBirdid().toString().equals("0") && unique.add(value)) {
                 context.write(key, value);
             }
         }
