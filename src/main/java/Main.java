@@ -5,10 +5,11 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 
 import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.Job;
 
-import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
-import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
+import output.DynamoDBOutputFormat;
 import reducer.BirdReducer;
 import reducer.ReducerOutputWritable;
 
@@ -16,24 +17,31 @@ import reducer.ReducerOutputWritable;
 public final class Main{
 
   public static void main(String[] args) throws Exception {
-   
-    Configuration conf = new Configuration();
-    Job job = Job.getInstance(conf, "birdwatch");
-    job.setJarByClass(Main.class);
-    job.setMapperClass(BirdMapper.class);
-    //job.setCombinerClass(BirdCombiner.class);
-    job.setReducerClass(BirdReducer.class);
 
-    job.setMapOutputKeyClass(Text.class);
-    job.setMapOutputValueClass(MapperOutputWritable.class);
+      // Create a new Job
+      Job job = new Job(new Configuration());
+      job.setJarByClass(Main.class);
 
-    job.setOutputKeyClass(Text.class);
-    job.setOutputValueClass(ReducerOutputWritable.class);
+      // Specify various job-specific parameters
+      job.setJobName("myjob");
 
+      job.setMapperClass(BirdMapper.class);
+      job.setReducerClass(BirdReducer.class);
 
-    FileInputFormat.addInputPath(job, new Path(args[0]));
-    FileOutputFormat.setOutputPath(job, new Path(args[1]));
-    System.exit(job.waitForCompletion(true) ? 0 : 1);
+      job.setMapOutputKeyClass(Text.class);
+      job.setMapOutputValueClass(MapperOutputWritable.class);
+
+      job.setOutputKeyClass(Text.class);
+      job.setOutputValueClass(ReducerOutputWritable.class);
+
+      job.setInputFormatClass(TextInputFormat.class);
+      job.setOutputFormatClass(DynamoDBOutputFormat.class);
+
+      FileInputFormat.addInputPath(job, new Path(args[0]));
+
+      // Submit the job, then poll for progress until the job is complete
+      job.waitForCompletion(true);
+
 
   }
 

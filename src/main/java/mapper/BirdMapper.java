@@ -4,6 +4,7 @@ import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import java.io.IOException;
 
+
 public class BirdMapper extends org.apache.hadoop.mapreduce.Mapper<Object, Text, Text, MapperOutputWritable> {
 
     private Text keyWordQ1Q2 = new Text();
