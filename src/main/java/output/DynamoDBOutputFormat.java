@@ -63,8 +63,8 @@ public class DynamoDBOutputFormat extends OutputFormat<Text, ReducerOutputWritab
 
                     case 3: //lastobservation
                         value = reducerOutputWritable.getDate().toString();
-                        updateItems.put("lastseen", new AttributeValueUpdate().withAction(AttributeAction.PUT).withValue(new AttributeValue().withS(value)));
                         key.put("birdid", new AttributeValue().withS(text.toString()));
+                        key.put("lastseen", new AttributeValue().withS(value));
                         table = QUERY3_TABLE;
                         break;
 

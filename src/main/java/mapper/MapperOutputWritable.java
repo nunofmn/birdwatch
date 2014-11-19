@@ -8,8 +8,6 @@ import java.io.IOException;
 
 public class MapperOutputWritable implements Writable{
 
-
-
     private IntWritable wingspan;
     private IntWritable birdweight;
     private Text towerid;
