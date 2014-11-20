@@ -1,4 +1,77 @@
+var AWS = require('aws-sdk');
+var dynamodb = new AWS.DynamoDB({region: 'us-west-2',  apiVersion: '2011-12-05'});
+var moment = require('moment');
 
+//Query table 1
+exports.query1 = function(req,res){
+	params = {
+		"TableName" : 'BW-MAXWINGSPAN',
+        Key: {
+            "HashKeyElement": {
+                "S": req.body.date
+            }
+        }
+	};
+	dynamodb.getItem(params, function(err,data){
+		if (err){
+			console.log(err,err.stack);
+			return res.status(404).end();
+		}
+		console.log(data);
+		return res.status(200).send(data.Item.towerid.S);
+	});
+}
+//Query table 2
+exports.query2 = function(req,res){
+	params = {
+		"TableName" : 'BW-SUMWEIGHT',
+        Key: {
+            "HashKeyElement": {
+                "S": req.body.date + ":" + req.body.towerid
+            }
+        }
+	};
+	dynamodb.getItem(params, function(err,data){
+		if (err){
+			console.log(err,err.stack);
+			return res.status(404).end();
+		}
+		console.log(data);
+		return res.status(200).send(data.Item.weight.S);
+	});
+}
+//Query table 3
+exports.query3 = function(req,res){
+    var date = moment().subtract(7, 'days').format('YYYY-MM-DD');
+    console.log("Number of birds not seen since: ", date);
+
+    params = {
+        "TableName" : 'BW-LASTOBSERVATION',
+        ScanFilter: {
+            "lastseen": {
+                ComparisonOperator: 'LE',
+                AttributeValueList: [{
+                    S: date
+                },
+                ]
+            }
+        }
+    };
+	dynamodb.scan(params, function(err,data){
+		if (err){
+			console.log(err,err.stack);
+			return res.status(404).end();
+		}
+
+		console.log("Number of items", data.Items.length);
+
+        var birdsid = data.Items.map(function(elem) {
+            return elem.birdid.S;
+        });
+
+		return res.status(200).send(birdsid);
+	});
+}
 
 //Simple and non-exhaustive date validator middleware
 exports.validateDate = function(req,res,next){
@@ -21,132 +94,3 @@ exports.validateTowerId = function() {
 		return res.status(404).end();
 	return next();
 };
-
-//Query table 1
-exports.query1 = function(req,res){
-
-
-	params = {
-		"TableName" : 'table1',
-		"AttributeToGet" : [
-			'towerId'
-		],
-		"KeyConditions" : {
-			date : {
-				"ComparisonOperator" : 'EQ',
-				"AttributeValueList" : [
-					S : req.date
-				]
-			}
-		} 
-	};
-	dynamodb.query(params, function(err,data){
-		if (err){
-			console.log(err,err.stack);
-			return res.status(404).end();
-		}
-		console.log(data);
-		return res.status(200).send(data);
-
-
-	});
-}
-//Query table 2
-exports.query2 = function(req,res){
-
-
-	params = {
-		"TableName" : 'table2',
-		"AttributeToGet" : [
-			'weight'
-		],
-		"KeyConditions" : {
-			date : {
-				"ComparisonOperator" : 'EQ',
-				"AttributeValueList" : [
-					S : req.date
-				]
-			},
-			towerId: {
-				"ComparisonOperator" : 'EQ',
-				"AttributeValueList" : [
-					S : req.towerId
-				]	
-			}
-		} 
-	};
-	dynamodb.query(params, function(err,data){
-		if (err){
-			console.log(err,err.stack);
-			return res.status(404).end();
-		}
-		console.log(data);
-		return res.status(200).send(data);
-
-
-	});
-}
-//Query table 3
-exports.query3 = function(req,res){
-
-	//For date as string comparison to work, dates must be stored as YYYY/MM/DD
-
-
-	params = {
-		"TableName" : 'table3',
-		"AttributeToGet" : [
-			'birdId'
-		],
-		"KeyConditions" : {
-			lastDate : {
-				"ComparisonOperator" : 'LT',
-				"AttributeValueList" : [
-					S : weekBefore
-				]
-			},
-		} 
-	};
-	dynamodb.query(params, function(err,data){
-		if (err){
-			console.log(err,err.stack);
-			return res.status(404).end();
-		}
-		console.log(data);
-		return res.status(200).send(data);
-
-
-	});
-}
-
-
-//
-// Returns the day one week before, in the same day of the week
-// #returns (String) -> "YYYY/MM/DD"
-//
-
-var weekBefore = function(){
-	
-
-	var maxDays = [31,28,31,30,31,30,31,31,30,31,30,31];
-	
-	var d = new Date();
-	var currYear=String('000'+d.getFullYear()).slice(-4);
-	var currMonth=String('0'+(d.getMonth()+1)).slice(-2);
-	var currDay = String('0'+d.getDate()).slice(-2);
-	
-	if (currDay-7 < 1){	//last week was last month
-		if (currMonth-1 < 1){	//if is january
-			currDay = String(maxDays[12-1]+(currDay-7)); //no need for padding (works only for 7)
-			currMonth = String(12);
-			currYear = String(currYear-1);
-
-		}
-		else{
-			currDay = String(maxDays[currMonth-2]+(currDay-7));
-			currMonth = String('0'+(currMonth-1)).slice(-2);
-		}
-	}
-
-	return currYear+"/"+currMonth+"/"+currDay;
-
-}
