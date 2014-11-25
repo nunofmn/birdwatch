@@ -4,41 +4,51 @@ var moment = require('moment');
 
 //Query table 1
 exports.query1 = function(req,res){
-	params = {
-		"TableName" : 'BW-MAXWINGSPAN',
+
+    if(req.body.date == "") {
+        return res.status(400).send("Date not defined.");
+    }
+
+    params = {
+        "TableName" : 'BW-MAXWINGSPAN',
         Key: {
             "HashKeyElement": {
                 "S": req.body.date
             }
         }
-	};
-	dynamodb.getItem(params, function(err,data){
-		if (err){
-			console.log(err,err.stack);
-			return res.status(404).end();
-		}
-		console.log(data);
-		return res.status(200).send(data.Item.towerid.S);
-	});
+    };
+    dynamodb.getItem(params, function(err,data){
+        if (err){
+            console.log(err,err.stack);
+            return res.status(404).end();
+        }
+        console.log(data);
+        return res.status(200).send(data.Item.towerid.S);
+    });
 }
 //Query table 2
 exports.query2 = function(req,res){
-	params = {
-		"TableName" : 'BW-SUMWEIGHT',
+
+    if(req.body.date == "" || req.body.towerid == "") {
+        return res.status(400);
+    }
+
+    params = {
+        "TableName" : 'BW-SUMWEIGHT',
         Key: {
             "HashKeyElement": {
                 "S": req.body.date + ":" + req.body.towerid
             }
         }
-	};
-	dynamodb.getItem(params, function(err,data){
-		if (err){
-			console.log(err,err.stack);
-			return res.status(404).end();
-		}
-		console.log(data);
-		return res.status(200).send(data.Item.weight.S);
-	});
+    };
+    dynamodb.getItem(params, function(err,data){
+        if (err){
+            console.log(err,err.stack);
+            return res.status(404).end();
+        }
+        console.log(data);
+        return res.status(200).send(data.Item.weight.S);
+    });
 }
 //Query table 3
 exports.query3 = function(req,res){
@@ -57,40 +67,40 @@ exports.query3 = function(req,res){
             }
         }
     };
-	dynamodb.scan(params, function(err,data){
-		if (err){
-			console.log(err,err.stack);
-			return res.status(404).end();
-		}
+    dynamodb.scan(params, function(err,data){
+        if (err){
+            console.log(err,err.stack);
+            return res.status(404).end();
+        }
 
-		console.log("Number of items", data.Items.length);
+        console.log("Number of items", data.Items.length);
 
         var birdsid = data.Items.map(function(elem) {
             return elem.birdid.S;
         });
 
-		return res.status(200).send(birdsid);
-	});
+        return res.status(200).send(birdsid);
+    });
 }
 
 //Simple and non-exhaustive date validator middleware
 exports.validateDate = function(req,res,next){
-	var date = req.date;
+    var date = req.date;
 
-	if (!date) return res.status(404).end();
+    if (!date) return res.status(404).end();
 
-	var parts = date.split('/')
-	var validDay = parts[0].match(/(^0[1-9])|(^[1-2][0-9])|(^3[0-1])/);
-	var validMonth = parts[1].match(/(^0[1-9])|(^1[0-2])/);
-	var validYear = parts[2].match(/(^1[900-999])|(^2[000-015])/);
+    var parts = date.split('/')
+    var validDay = parts[0].match(/(^0[1-9])|(^[1-2][0-9])|(^3[0-1])/);
+    var validMonth = parts[1].match(/(^0[1-9])|(^1[0-2])/);
+    var validYear = parts[2].match(/(^1[900-999])|(^2[000-015])/);
 
-	if (validDay && validMonth && validMonth)
-		return next();
-	return res.status(404).send("Malformed Date");
+    if (validDay && validMonth && validMonth)
+        return next();
+    return res.status(404).send("Malformed Date");
 };
 
 exports.validateTowerId = function() {
-	if (!req.towerId)
-		return res.status(404).end();
-	return next();
+    if (!req.towerId)
+        return res.status(404).end();
+    return next();
 };
