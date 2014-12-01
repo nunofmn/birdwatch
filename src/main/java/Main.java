@@ -27,6 +27,8 @@ public final class Main{
 
       job.setMapperClass(BirdMapper.class);
       job.setReducerClass(BirdReducer.class);
+      job.setCombinerClass(BirdCombiner.class);
+
 
       job.setMapOutputKeyClass(Text.class);
       job.setMapOutputValueClass(MapperOutputWritable.class);

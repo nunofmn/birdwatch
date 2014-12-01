@@ -23,7 +23,9 @@ public class BirdMapper extends org.apache.hadoop.mapreduce.Mapper<Object, Text,
             s[i]=totrim[i].trim();
 
         if(!(s[3].equals("-1"))) {
+
             final String wing = (s[6].equals("2")) ? s[5] : "0";
+
             outputMapperQ1Q2.setQueryType(new IntWritable(0));
             outputMapperQ1Q2.setBirdid(new Text(s[3]));
             outputMapperQ1Q2.setBirdweight(new IntWritable(Integer.parseInt(s[4])));
