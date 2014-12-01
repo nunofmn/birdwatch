@@ -32,7 +32,14 @@ app.get('/unseen', function (req, res) {
     query.query3(req,res);
 });
 
-app.listen( process.env.PORT || 3000 );
+app.get('/test', function (req, res) {
+    for(var i=0; i<1000000; i++) {
+        Math.tan(Math.random());
+    }
+    res.status(200).send("OK");
+});
+
+app.listen(8080);
 
 console.log("--- Birdwatch app webserver ---");
 console.log("Running in http://localhost:" + (process.env.PORT||3000));
