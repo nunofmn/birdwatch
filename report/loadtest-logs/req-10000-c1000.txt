@@ -1,0 +1,73 @@
+ab -r -n 10000 -c 1000 http://birdwatch-lb-525863057.us-west-2.elb.amazonaws.com/test
+This is ApacheBench, Version 2.3 <$Revision: 1554214 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking birdwatch-lb-525863057.us-west-2.elb.amazonaws.com (be patient)
+    Completed 1000 requests
+    Completed 2000 requests
+    Completed 3000 requests
+    Completed 4000 requests
+    Completed 5000 requests
+    Completed 6000 requests
+    Completed 7000 requests
+    Completed 8000 requests
+    Completed 9000 requests
+apr_pollset_poll: The timeout specified has expired (70007)
+    Total of 9968 requests completed
+    λ MacBook-Pro-de-Nuno-2 ~ → ab -r -n 10000 -c 1000 http://birdwatch-lb-525863057.us-west-2.elb.amazonaws.com/test
+    This is ApacheBench, Version 2.3 <$Revision: 1554214 $>
+    Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+    Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking birdwatch-lb-525863057.us-west-2.elb.amazonaws.com (be patient)
+    Completed 1000 requests
+    Completed 2000 requests
+    Completed 3000 requests
+    Completed 4000 requests
+    Completed 5000 requests
+    Completed 6000 requests
+    Completed 7000 requests
+    Completed 8000 requests
+    Completed 9000 requests
+    Completed 10000 requests
+    Finished 10000 requests
+
+
+    Server Software:
+    Server Hostname:        birdwatch-lb-525863057.us-west-2.elb.amazonaws.com
+    Server Port:            80
+
+    Document Path:          /test
+    Document Length:        2 bytes
+
+    Concurrency Level:      1000
+    Time taken for tests:   115.769 seconds
+    Complete requests:      10000
+    Failed requests:        47
+(Connect: 0, Receive: 7, Length: 40, Exceptions: 0)
+    Non-2xx responses:      33
+    Total transferred:      1804410 bytes
+    HTML transferred:       19920 bytes
+    Requests per second:    86.38 [#/sec] (mean)
+    Time per request:       11576.892 [ms] (mean)
+    Time per request:       11.577 [ms] (mean, across all concurrent requests)
+    Transfer rate:          15.22 [Kbytes/sec] received
+
+Connection Times (ms)
+                  min  mean[+/-sd] median   max
+    Connect:      175  232  180.4    194    1440
+    Processing:   178 10757 6670.6  10572   59871
+    Waiting:        0 10756 6670.4  10571   59860
+    Total:        358 10989 6709.4  10765   60211
+
+Percentage of the requests served within a certain time (ms)
+    50%  10765
+    66%  11276
+    75%  11402
+    80%  13243
+    90%  18606
+    95%  19991
+    98%  31389
+    99%  33383
+    100%  60211 (longest request)
