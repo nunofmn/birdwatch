@@ -71,7 +71,7 @@ public class BirdReducer extends Reducer<Text, MapperOutputWritable, Text, Reduc
                         Date lastdate = format.parse(birdlastdate.get(birdid));
                         Date currentdate = format.parse(value.getDate().toString());
 
-                        if(currentdate.before(lastdate)) {
+                        if(currentdate.after(lastdate)) {
                             birdlastdate.put(birdid, value.getDate().toString());
                         }
 
@@ -93,6 +93,7 @@ public class BirdReducer extends Reducer<Text, MapperOutputWritable, Text, Reduc
             //Output (k1,v1) -> Query 1
             outputk1.set(key);
             outputv1.setQuerytype(new IntWritable(1));
+            System.out.println("maxwingspan " + maxwingspan + " towermaxwingspan " +towermaxwingspan);
             outputv1.setTowerid(new Text(towermaxwingspan));
             context.write(outputk1, outputv1);
 
